@@ -3,34 +3,27 @@ import "./App.css";
 import ContactForm from "../ContactForm/ContactForm";
 import SearchBox from "../SearchBox/SearchBox";
 import ContactList from "../ContactList/ContactList";
-
-// import { useEffect, useState } from "react";
-
-// const storageKey = "contacts-key";
+import { useDispatch, useSelector } from "react-redux";
+import { selectError, selectIsLoading } from "../../redux/contactsSlice";
+import { useEffect } from "react";
+import { fetchContacts } from "../../redux/contactsOps";
 
 function App() {
-  // const loadContacts = () => {
-  //   const jsonData = localStorage.getItem(storageKey);
-  //   const data = JSON.parse(jsonData);
-  //   if (!data) {
-  //     return initialContacts;
-  //   }
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
-  //   return data;
-  // };
+  const dispatch = useDispatch();
 
-  // const saveContacts = () => {
-  //   const strData = JSON.stringify(contacts);
-  //   localStorage.setItem(storageKey, strData);
-  // };
-
-  // useEffect(saveContacts, [contacts]);
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm />
       <SearchBox />
+      {!error && isLoading && <p>Loading data...</p>}
       <ContactList />
     </div>
   );
